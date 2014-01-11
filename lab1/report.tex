@@ -1,0 +1,69 @@
+%----------------------------------------------------------------------------------------
+%	Header stuff that doesn't really matter...
+%----------------------------------------------------------------------------------------
+\documentclass[paper=letter, fontsize=11pt]{scrartcl}
+\usepackage[T1]{fontenc}
+\usepackage{fourier}
+\usepackage[english]{babel}
+\usepackage{amsmath,amsfonts,amsthm}
+\usepackage{caption}
+\usepackage{sectsty}
+\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\fancyhead[R]{Phil Crumm 804-005-575 | Connor Proctor 703-999-284}
+\fancyfoot[L]{}
+\fancyfoot[C]{}
+\fancyfoot[R]{\thepage}
+\renewcommand{\headrulewidth}{0pt}
+\renewcommand{\footrulewidth}{0pt}
+\setlength{\headheight}{13.6pt}
+
+%----------------------------------------------------------------------------------------
+%	Title area
+%----------------------------------------------------------------------------------------
+
+\newcommand{\horrule}[1]{\rule{\linewidth}{#1}}
+
+\title{	
+\normalfont \normalsize 
+\textsc{University of California, Los Angeles} \\ [25pt]
+\horrule{0.5pt} \\[0.4cm]
+\Large Computer Science M152A - Digital Design Lab \\
+\horrule{2pt} \\[0.5cm]
+}
+
+\author{Phillip Crumm \\*804-005-575 \\* Connor Proctor \\* 703-999-284 \\* \\*Lab 1: Laboratory Familiarization: The Real World}
+
+\date{\normalsize January 16, 2014}
+\usepackage[parfill]{parskip}
+\begin{document}
+
+\clearpage\maketitle
+\thispagestyle{empty}
+\pagebreak
+
+%----------------------------------------------------------------------------------------
+%	The body
+%----------------------------------------------------------------------------------------
+
+\section{Objective}
+This laboratory's purpose is to familiarize ourselves with the hardware and tools that will be utilized for the duration of this course. Through a series of experiments, we explore several physical chips, breadboarding, circuit design, and the VHDL design language.
+
+\section{Exercise 1 - TTL/CMOS Static Electrical Characteristics}
+For this exercise, we explore the operating characters of TTL and CMOS NAND gates through the 74LS00 and 74HC00, respectively.
+
+\subsection{74LS00 (TTL)}
+First, we set IN to HI and receive output of LO, 0.1V. This is below the maximum $V_{OL}$ specified by datasheet and is a reasonable output. Second, we set IN to LO and receive output of HI, 4.9V, which is above the mimimum $V_{OH}$ specified by the datasheet. These results are reasonable.
+
+\subsection{74HC00 (CMOS)}
+We repeat the above using the 74HC00, and anticipate similar reuslts as they are bot NAND gates. First, we set IN to HI and receive LO output which is below $V_{OL}$ and thus acceptable. Next, we set IN to LO and receive HI, as expected. This is above $V_{OH}$ and not problematic.
+
+\subsection{Interfacing TTL and CMOS}
+Some difficulty occurs in interfacing TTL and CMOS gates. The CMOS gate, the 74HC00, designates LO as 0-0.5V and HI as 3.5V-15(!)V. On the other hand, the TTL gate, the 74LS00, sets LO As 0-.8V and HI as 2V-5V.
+
+The CMOS gate is less noise sensitive and input-limited than the TTL gate; thus interfacing the two may cause some undesired results. When a TTL gate is connected to a CMOS gate, the circuit behaves as expected; the TTL gate's output is within the noisy margin of the CMOS gate. On the other hand, when the CMOS gate is connected to the TTL gate, LO is output consistently. This is because the CMOS gate's output is not within the tight margins required by the TTL gate.
+
+%----------------------------------------------------------------------------------------
+
+\end{document}
