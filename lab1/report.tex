@@ -8,9 +8,8 @@
 \usepackage{amsmath,amsfonts,amsthm}
 \usepackage{caption}
 \usepackage{sectsty}
-\allsectionsfont{\centering \normalfont\scshape} % Make all sections centered, the default font and small caps
+\allsectionsfont{\normalfont\sffamily\bfseries}
 \usepackage{fancyhdr}
-\pagestyle{fancyplain}
 \fancyhead[R]{Phil Crumm 804-005-575 | Connor Proctor 703-999-284}
 \fancyfoot[L]{}
 \fancyfoot[C]{}
@@ -63,6 +62,34 @@ We repeat the above using the 74HC00, and anticipate similar reuslts as they are
 Some difficulty occurs in interfacing TTL and CMOS gates. The CMOS gate, the 74HC00, designates LO as 0-0.5V and HI as 3.5V-15(!)V. On the other hand, the TTL gate, the 74LS00, sets LO As 0-.8V and HI as 2V-5V.
 
 The CMOS gate is less noise sensitive and input-limited than the TTL gate; thus interfacing the two may cause some undesired results. When a TTL gate is connected to a CMOS gate, the circuit behaves as expected; the TTL gate's output is within the noisy margin of the CMOS gate. On the other hand, when the CMOS gate is connected to the TTL gate, LO is output consistently. This is because the CMOS gate's output is not within the tight margins required by the TTL gate.
+
+\section{Exercise 2 - 555 Timer}
+For the second exercise, we configure a 555 Timer and evaluate its use as a clock. After configuring the timer with two 10k resistors and one 10nF capacitor, we measure the output (pin 3) of the timer. We measure the frequency to approximate as 1/150 cycles per microseconds (for a period of 150 microseconds); this is equal to 6600Hz. Total time spent HI is 100 microseconds, leading to a duty cycle of 66\%.
+
+We then replace the second resistor in the series, $R_{1}$, with a 1-10k variable potentiometer. We adjust the knob to find a duty cycle of about 60\%. As we adjust the potentiometer, time spent HI is increased; time spent LO is unchanged. We eventually settle on slightly above 50\%, or 5k resistence, for a duty cycle of 60\%.
+
+The contionus, predictible, and periodic behavior of the wave makes it effectively used as a clock. Its datasheet confirms its relatively accurate timing stability and margin of error (within 1\%). We find the clock to output nearly 5V on every HI cycle, which is suitably HI enough for any other chips we have thus far encountered.
+
+\section{Exercise 3 - Glitches}
+This glitch is a consequence of the propagation delay between each NAND gate; for a brief period of time, CLK will output the opposite of output 11 (the third NAND gate in the three-gate inverter series) due to the delay. This glitch is not measurable as it is quite small--further, its length varies with each oscillation.
+
+\section{Exercise 4 - Asynchronous Counter}
+Next, we configured the asynchronous counter using the 74LS393 as shown. After configuration, we measure the output of the clock to verify its accuracy. Starting from the least significant bit, we note that the time spent LO and HI (the period) increase by a power of two for each bit, as we would expect a binary-counting clock to behave.
+
+\section{Exercise 5 - Synchronous Counter}
+Continuing on, we connected two synchronous counter (74LS163). For consistency, we connected the click output to inputs 2 on both counters. We then utilized the scope determine that each counter was operating as desired. The first counter increments always; the second, only when the first has reached its overflow.
+
+This is consistent with our understanding of the operation of the T input and RCO output. The T input acts as an enabler bit for the counter; the counter will count up if and only if T is HI. This is consistent with our observations; the first counter, with T to HI counts always; the second, with T to the first counter's RCO outputs if and only if T has reached its maximum.
+
+The RCO output, or ripple-carry output, is LO unless the current counter is overflowing; it then fires HI.
+
+Both the asynchronous 74LS393 and the synchronous 74LS163 will require four flip-flops per output bit to maintain state. The synchronous 74LS163 will also require additional circuitry to enable synchronous operation (ensuring it operates only when the equivalant of T is enabled), increasing the complexity. Depending on additional hardware available, this may be a trivial increase to the 8 bits of flip-flops required to maintain state.
+
+\section{Exercise 6 - Ring Oscillator}
+
+\section{Exercise 7 - Set-Reset Latch with NAND Gates}
+
+\section{Exercise 8 - Writing Combinational VHDL Code}
 
 %----------------------------------------------------------------------------------------
 
