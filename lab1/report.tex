@@ -8,6 +8,8 @@
 \usepackage{amsmath,amsfonts,amsthm}
 \usepackage{caption}
 \usepackage{sectsty}
+\usepackage{graphicx}
+\usepackage{float}
 \allsectionsfont{\normalfont\sffamily\bfseries}
 \usepackage{fancyhdr}
 \fancyhead[R]{Phil Crumm 804-005-575 | Connor Proctor 703-999-284}
@@ -86,10 +88,24 @@ The RCO output, or ripple-carry output, is LO unless the current counter is over
 Both the asynchronous 74LS393 and the synchronous 74LS163 will require four flip-flops per output bit to maintain state. The synchronous 74LS163 will also require additional circuitry to enable synchronous operation (ensuring it operates only when the equivalant of T is enabled), increasing the complexity. Depending on additional hardware available, this may be a trivial increase to the 8 bits of flip-flops required to maintain state.
 
 \section{Exercise 6 - Ring Oscillator}
+You can create a ring oscillator by chaining an odd number of inverter gates together. Doing this creates an oscillator because of propogation delays within each gate. After the input to a gate has changed, it takes an amount of time for the output to change accordingly. Since we are using an odd number of gates, the output of the last gate is the opposite of the first gate. So once the signal has propagted through all the gates, the input to the first gate changes and the process starts over. (Note that the "first" gate can be any arbitrary gate in the chain.) This affect can be seen in the timing diagram below.
+\begin{figure}[H]
+\includegraphics[height=75mm]{timing_diagram.png}
+\centering
+\caption{Three inveter timing diagram}
+\label{overflow}
+\end{figure}
+\subsection{11 Gate Ring Oscillator}
+We first used two hex inverter chips (74LS04) to chain 11 inverter gates together in a loop.
+After we verified that this ring oscillator was working, we then measured the period of oscillation to be 0.12 microseconds. By taking the half-period and dividing it by the number of gates, we can determine an average propogation delay per gate of about 0.0055 microseconds. One over the period gives us a frequency of 8.33 oscillations/microsecond. The 11 gate oscillator had a maximum of 2.2 volts and a minimum of 1.5 volts.
+\subsection{17 Gate Ring Oscillator}
+Next we wired up another 6 more inverters into the circuit for a total of 17. Based on the propogation delay of the gates measured in the previous exersize, the period of oscillation for 17 gates should be 2*17*0.0055 = 0.187 microseconds. Using the oscilloscope, we meassured the period to be 0.19 microseconds, surprisingly close to the calculated value! The minimum and maximum voltages we measured to be 1 and 5 volts, respectively. This is a lot cleaner than the 11 gate oscillator, possibly due to the period being longer giving the voltage more time to equalize. 
 
 \section{Exercise 7 - Set-Reset Latch with NAND Gates}
+A (non-gated) SR latch has two inputs, S (set) and R (reset), and two outputs (Q and Q'). When S is high (and R is low), Q goes high. Then after both S goes back to low, Q still stays "latched" high until R goes high. When R goes high, Q goes back to low and Q' goes high. It then "latches" like this until again S is pressed. We use two NAND gates and two inverters to achieve this. If both S and R are high (which is invalid input), then both Q and Q' will go high. A gated SR latch uses two NAND gates in place of the inverter, with the 2nd input to these NAND gates hooked up to a new E (enable) input. When E is low, the S and R inputs cannot affect the main SR latch. Only when E is high is input enabled. We built a gated SR latch using 74LS00 chips, and it worked as expected.
 
 \section{Exercise 8 - Writing Combinational VHDL Code}
+We started by making Karnaugh Maps for each segment of the 7-segment display (see attached pre-lab). We then used this to program the logic of the FPGA (see attached code). The display has common anode, meaning that when we turned an individual segment low it turned on, and when high it turned off.
 
 %----------------------------------------------------------------------------------------
 
