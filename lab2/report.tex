@@ -58,9 +58,15 @@ Utilizing an eight-count (three bit) clock to generate control codes simplifies 
 
 \section{Implementation}
 
-CONNOR PLZ PUT DIAGRAM HERE
 
-We are able to implement our design very simply. To advance the clock and provide reset functionality, we utilize two de-bounced input buttons; the implementation of these buttons is specified in the lab manual and is not duplicated here conciseness.
+\begin{figure}[H]
+\includegraphics[height=180mm]{prelab2.jpg}
+\centering
+\caption{Schematic}
+\label{overflow}
+\end{figure}
+
+We are able to implement our design very simply. To advance the clock and provide reset functionality, we utilize two de-bounced input buttons; the implementation of these buttons is specified in the lab manual and is not duplicated here for conciseness.
 
 From here, the clock is used to control a series of multiplexers. Prior to the first clock iteration (on count 0), we must specify our two desired inputs on the provided switches; again, the exact wiring of these switches is provided in the lab manual and is not duplicated here. On clock cycles 0 through 3, we use a series of multiplexers, each controlled by a clock bit, to load the correct number on the A and B side into the shift register. At the end of cycle 3, each 4-bit number is loaded in its entirety into the 4-bit shift register, with the least significant bit (LSB) of each number held in the rightmost position of the register.
 
