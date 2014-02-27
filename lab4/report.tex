@@ -58,11 +58,32 @@ The FPGA accepts only one seven-segment input. We use a 625Hz output from our cl
 
 Additional complexity is introduced with the reset and adjust functionality. Reset is implemented trivially by attaching directly to the reset bits on the sixty-counters. Adjust is implemented though connection to the CLK input on sixty-counter, which will be described further.
 
+\begin{figure}[H]
+\includegraphics[height=120mm]{wholething.PNG}
+\centering
+\caption{Implementation Overview}
+\label{overflow}
+\end{figure}
+
 \subsection{Clock Reducer}
 The clock reducer is implemented as described in the laboratory manual. Using the FPGA's single 100MHz clock, we chain together two five-thousand counters. We then attach these counters to chains of flip-flops to further divide by two. Using this technique, we generate 1Hz, 2Hz, and 625Hz clock signals for later use.
 
+\begin{figure}[H]
+\includegraphics[height=120mm]{countfivethousand.PNG}
+\centering
+\caption{Clock Reducer}
+\label{overflow}
+\end{figure}
+
 \subsection{Sixty Counter}
-Our sixty-counters are implemented as expected. The first sixty-counter, used for seconds, is driven directly by the clock input. The second's CLK input is the TC bit of the first, causing increment only upon the elapsing of a minute. Each sixty-counter resets when its count reaches 60 (passes 59), as expected.
+Our sixty-counters are implemented as two decade counters. When the first decade counter reaches 10, it resets itself to zero and fires the clock enable bit on the second decade counter. When this decade counter reaches 6, it sets its TC to high and rolls over similarly. Together, these two counters reliably count to 60 using a 1Hz clock input.
+
+\begin{figure}[H]
+\includegraphics[height=120mm]{decadecounter.PNG}
+\centering
+\caption{Decade Counterr}
+\label{overflow}
+\end{figure}
 
 \subsection{Reset}
 The debounced reset button is connected directly to the reset input for each sixty-counter.
@@ -78,6 +99,13 @@ When the minutes switch is enabled, functionality is reversed: the CLK is ground
 The LED controller accepts the input for each clock and decodes the input (zero to 59) into a proper two-digit seven-segment code using schematic implementation of switching expressions we worked out manually.
 
 The LED controller also takes as input the 625Hz clock signal. This is a refresh signal: on each clock cycle, we increment a four-counter which is used to select the proper seven-segment display to activate. In this manner, we "scan" across the seven segment display, illuminating each digit briefly. As the human eye cannot detect refresh rates above 35Hz or so, this means that all four displays appear to be persistently illuminated.
+
+\begin{figure}[H]
+\includegraphics[height=120mm]{led.PNG}
+\centering
+\caption{LED Controller}
+\label{overflow}
+\end{figure}
 
 \subsection{Implementation Difficulties}
 The bulk of our trouble was in constructing the initial clock. We initially attempted to design our own clock step-down mechanism (rather than using two five-thousand counters), and found that chaining multiple counters created a very noisy signal. After we re-read the lab and stuck to the suggested design, these problems were resolved.
